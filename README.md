@@ -1,5 +1,7 @@
 # JWT auth and Basic auth, Swagger UI Security Configuration
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/I3I63W4OK)
+
 This repository demos a Web API project, `ApiAuthDemo`, which is configured to use JWT authentication globally, and some action methods can be configured to use Basic Auth using an attribute. The demo website root is its Swagger user interface.
 
 There is another Console app `BasicAuthApiConsumer`, which is a demo to consume a Basic Authentication API endpoint. The Console app needs to run after you start the `ApiAuthDemo` website, and you can adjust the URL in the Console program accordingly.
@@ -23,3 +25,9 @@ There is another Console app `BasicAuthApiConsumer`, which is a demo to consume 
 ### Screen recording for API authentication in Swagger UI
 
 ![Screen recording for API authentication in Swagger UI](./swagger-auth.gif)
+
+## License
+
+Feel free to use the code in this repository as it is under MIT license.
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/I3I63W4OK)
