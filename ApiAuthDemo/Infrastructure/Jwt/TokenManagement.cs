@@ -1,22 +1,10 @@
-﻿using System.Text.Json.Serialization;
+﻿namespace ApiAuthDemo.Infrastructure.Jwt;
 
-namespace ApiAuthDemo.Infrastructure.Jwt
+public class TokenManagement
 {
-    public class TokenManagement
-    {
-        [JsonPropertyName("secret")]
-        public string Secret { get; set; }
-
-        [JsonPropertyName("issuer")]
-        public string Issuer { get; set; }
-
-        [JsonPropertyName("audience")]
-        public string Audience { get; set; }
-
-        [JsonPropertyName("accessExpiration")]
-        public int AccessExpiration { get; set; }
-
-        [JsonPropertyName("refreshExpiration")]
-        public int RefreshExpiration { get; set; }
-    }
+    public string Secret { get; set; } = string.Empty;
+    public string Issuer { get; set; } = string.Empty;
+    public string Audience { get; set; } = string.Empty;
+    public int AccessExpiration { get; set; }
+    public int RefreshExpiration { get; set; }
 }

@@ -1,34 +1,31 @@
-﻿using Microsoft.Extensions.Logging;
+﻿namespace ApiAuthDemo.Services;
 
-namespace ApiAuthDemo.Services
+public interface IUserService
 {
-    public interface IUserService
+    bool IsValidUser(string userName, string password);
+}
+
+public class UserService : IUserService
+{
+    private readonly ILogger<UserService> _logger;
+    // inject database for user validation
+    public UserService(ILogger<UserService> logger)
     {
-        bool IsValidUser(string userName, string password);
+        _logger = logger;
     }
 
-    public class UserService : IUserService
+    public bool IsValidUser(string userName, string password)
     {
-        private readonly ILogger<UserService> _logger;
-        // inject database for user validation
-        public UserService(ILogger<UserService> logger)
+        _logger.LogInformation($"Validating user [{userName}]");
+        if (string.IsNullOrWhiteSpace(userName))
         {
-            _logger = logger;
+            return false;
         }
 
-        public bool IsValidUser(string userName, string password)
+        if (string.IsNullOrWhiteSpace(password))
         {
-            _logger.LogInformation($"Validating user [{userName}]");
-            if (string.IsNullOrWhiteSpace(userName))
-            {
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(password))
-            {
-                return false;
-            }
-            return true;
+            return false;
         }
+        return true;
     }
 }
