@@ -1,18 +1,9 @@
-﻿using System.Security.Claims;
-
-namespace ApiAuthDemo.Controllers;
+﻿namespace ApiAuthDemo.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ValuesController : ControllerBase
+public class ValuesController(ILogger<ValuesController> logger) : ControllerBase
 {
-    private readonly ILogger<ValuesController> _logger;
-
-    public ValuesController(ILogger<ValuesController> logger)
-    {
-        _logger = logger;
-    }
-
     /// <summary>
     /// API allows anonymous
     /// </summary>
@@ -34,7 +25,7 @@ public class ValuesController : ControllerBase
     public IEnumerable<int> JwtAuth()
     {
         var username = User.Identity!.Name;
-        _logger.LogInformation("User [{username}] is visiting jwt auth", username);
+        logger.LogInformation("User [{username}] is visiting jwt auth", username);
         var rng = new Random();
         return Enumerable.Range(1, 10).Select(_ => rng.Next(0, 100));
     }
@@ -48,7 +39,7 @@ public class ValuesController : ControllerBase
     public IEnumerable<int> BasicAuth()
     {
         var username = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        _logger.LogInformation("basic auth from User [{username}]", username);
+        logger.LogInformation("basic auth from User [{username}]", username);
         var rng = new Random();
         return Enumerable.Range(1, 10).Select(_ => rng.Next(0, 100));
     }
@@ -58,9 +49,9 @@ public class ValuesController : ControllerBase
     [ApiExplorerSettings(IgnoreApi = true)]
     public IActionResult BasicAuthLogout()
     {
-        _logger.LogInformation("basic auth logout");
+        logger.LogInformation("basic auth logout");
         // NOTE: there's no good way to log out basic authentication. This method is a hack.
-        HttpContext.Response.Headers["WWW-Authenticate"] = "Basic realm=\"My Realm\"";
+        HttpContext.Response.Headers.WWWAuthenticate = "Basic realm=\"My Realm\"";
         return new UnauthorizedResult();
     }
 }

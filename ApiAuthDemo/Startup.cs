@@ -1,28 +1,17 @@
 using System.Reflection;
-using System.Text;
-using ApiAuthDemo.Infrastructure.Jwt;
-using ApiAuthDemo.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace ApiAuthDemo;
 
-public class Startup
+public class Startup(IConfiguration configuration)
 {
-    public Startup(IConfiguration configuration)
-    {
-        Configuration = configuration;
-    }
-
-    public IConfiguration Configuration { get; }
-
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddControllers();
 
-        var token = Configuration.GetRequiredSection("tokenManagement").Get<TokenManagement>()!;
+        var token = configuration.GetRequiredSection("tokenManagement").Get<TokenManagement>()!;
         services.AddSingleton(token);
         services.AddAuthentication(x =>
         {
@@ -52,7 +41,7 @@ public class Startup
                 Description = "A simple demo with JWT Auth APIs and Basic Auth APIs",
                 Contact = new OpenApiContact
                 {
-                    Name = @"GitHub Repository",
+                    Name = "GitHub Repository",
                     Email = string.Empty,
                     Url = new Uri("https://github.com/dotnet-labs/ApiAuthDemo")
                 }
@@ -68,7 +57,7 @@ public class Startup
                 Description = "Enter JWT Bearer token **_only_**",
                 In = ParameterLocation.Header,
                 Type = SecuritySchemeType.Http,
-                Scheme = "bearer", // must be lower case
+                Scheme = "bearer", // must be lowercase
                 BearerFormat = "JWT",
                 Reference = new OpenApiReference
                 {
@@ -79,7 +68,7 @@ public class Startup
             c.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
             c.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
-                {securityScheme, new string[] { }}
+                {securityScheme, Array.Empty<string>()}
             });
 
             // add Basic Authentication

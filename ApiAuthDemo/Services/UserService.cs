@@ -5,18 +5,12 @@ public interface IUserService
     bool IsValidUser(string userName, string password);
 }
 
-public class UserService : IUserService
+public class UserService(ILogger<UserService> logger) : IUserService
 {
-    private readonly ILogger<UserService> _logger;
-    // inject database for user validation
-    public UserService(ILogger<UserService> logger)
-    {
-        _logger = logger;
-    }
-
+    // you can inject database for user validation
     public bool IsValidUser(string userName, string password)
     {
-        _logger.LogInformation($"Validating user [{userName}]");
+        logger.LogInformation("Validating user [{userName}]", userName);
         if (string.IsNullOrWhiteSpace(userName))
         {
             return false;

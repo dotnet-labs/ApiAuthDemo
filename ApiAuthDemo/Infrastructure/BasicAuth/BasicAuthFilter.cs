@@ -1,8 +1,5 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
-using System.Security.Claims;
-using System.Text;
-using ApiAuthDemo.Services;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace ApiAuthDemo.Infrastructure.BasicAuth;
@@ -16,14 +13,14 @@ public class BasicAuthFilter : IAuthorizationFilter
         _realm = realm;
         if (string.IsNullOrWhiteSpace(_realm))
         {
-            throw new ArgumentNullException(nameof(realm), @"Please provide a non-empty realm value.");
+            throw new ArgumentNullException(nameof(realm), "Please provide a non-empty realm value.");
         }
     }
     public void OnAuthorization(AuthorizationFilterContext context)
     {
         try
         {
-            var authHeader = context.HttpContext.Request.Headers["Authorization"].ToString();
+            var authHeader = context.HttpContext.Request.Headers.Authorization.ToString();
             var authHeaderValue = AuthenticationHeaderValue.Parse(authHeader);
             if (authHeaderValue.Scheme.Equals(AuthenticationSchemes.Basic.ToString(), StringComparison.OrdinalIgnoreCase))
             {
@@ -59,7 +56,7 @@ public class BasicAuthFilter : IAuthorizationFilter
     private void ReturnUnauthorizedResult(AuthorizationFilterContext context)
     {
         // Return 401 and a basic authentication challenge (causes browser to show login dialog)
-        context.HttpContext.Response.Headers["WWW-Authenticate"] = $"Basic realm=\"{_realm}\"";
+        context.HttpContext.Response.Headers.WWWAuthenticate = $"Basic realm=\"{_realm}\"";
         context.Result = new UnauthorizedResult();
     }
 }
